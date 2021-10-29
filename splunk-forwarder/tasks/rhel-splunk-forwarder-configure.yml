@@ -1,3 +1,5 @@
+# The configuraton script is expecting an installation to be present or it blows up.
+
 - name: Create Splunk group
   group:
     name: "{{ splunk_forwarder_group }}"
