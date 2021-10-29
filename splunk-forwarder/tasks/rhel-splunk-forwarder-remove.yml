@@ -10,6 +10,12 @@
   become: yes
   when: service_status.stat.exists
 
+- name: Remove Splunk from Yum
+  yum:
+    name: splunkforwarder
+    state: absent
+  become: yes
+
 - name: Remove Splunk Forwarder Service File
   file:
     path: /etc/systemd/system/splunk-forwarder.service

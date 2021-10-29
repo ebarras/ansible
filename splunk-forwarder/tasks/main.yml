@@ -21,7 +21,7 @@
       tags:
         - configure
   when: ansible_facts['os_family']|lower == 'redhat'
-  tags: configure
+  tags: [configure, never]
 
 - name: Remove Splunk Forwarder for RHEL
   include_tasks:
@@ -30,7 +30,7 @@
       tags:
         - remove
   when: ansible_facts['os_family']|lower == 'redhat'
-  tags: remove
+  tags: [remove, never]
 
 - name: Get Splunk-Forwarder Status
   include_tasks:
@@ -39,4 +39,4 @@
       tags:
         - status
   when: ansible_facts['os_family']|lower == 'redhat'
-  tags: status
+  tags: [status, never]
