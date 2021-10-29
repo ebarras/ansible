@@ -1,0 +1,6 @@
+# Tasks here might include:
+
+# Check to see service is running and enabled and the service file is present
+# Check correct log file permissions
+# Check deploymentconfig
+# Check Directory Ownership
