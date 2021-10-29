@@ -1,2 +1,11 @@
 ---
 # defaults file for splunk-forwarder
+splunk_forwarder_user: s_splunk
+splunk_forwarder_group: s_splunk
+splunk_forwarder_uid: 10011
+splunk_forwarder_gid: 10011
+splunk_url: https://download.splunk.com/products/universalforwarder/releases/8.2.3/linux/splunkforwarder-8.2.3-cd0848707637-linux-2.6-x86_64.rpm
+splunk_forwarder_depl_server: 127.0.0.1
+splunk_forwarder_logs:
+  - /var/log/messages
+  - /var/log/secure

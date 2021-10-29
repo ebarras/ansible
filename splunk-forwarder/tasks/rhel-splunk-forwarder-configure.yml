@@ -1,0 +1,53 @@
+- name: Create Splunk group
+  group:
+    name: "{{ splunk_forwarder_group }}"
+    gid: "{{ splunk_forwarder_gid }}"
+    state: present
+  become: yes
+
+- name: Create Splunk user
+  user:
+    name: "{{ splunk_forwarder_user }}"
+    group: "{{ splunk_forwarder_group }}"
+    uid: "{{ splunk_forwarder_uid }}"
+    state: present
+  become: yes
+
+- name: Copy deploymentclient file
+  template:
+    src: deploymentclient.conf.j2
+    dest: /opt/splunkforwarder/etc/system/local/deploymentclient.conf
+    mode: 0664
+  become: yes
+
+- name: Set logfile permissions
+  acl:
+    path: "{{ log_item }}"
+    entity: "{{ splunk_forwarder_user }}"
+    state: present
+    etype: user
+    permissions: r
+    recursive: true
+  with_items: "{{ splunk_forwarder_logs }}"
+  loop_control:
+    loop_var: log_item
+  become: yes
+
+- name: Set Ownership on Splunk Directory
+  file:
+    path: /opt/splunkforwarder
+    state: directory
+    recurse: yes
+    owner: "{{ splunk_forwarder_user }}"
+    group: "{{ splunk_forwarder_group }}"
+  become: yes
+
+- name: Upload Splunk Systemd Script
+  template:
+    src: splunk-forwarder.service.j2
+    dest: /etc/systemd/system/splunk-forwarder.service
+    owner: root
+    group: root
+    mode: 0755
+  notify: Enable Splunk Forwarder
+  become: yes

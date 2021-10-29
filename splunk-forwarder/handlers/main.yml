@@ -1,2 +1,7 @@
 ---
-# handlers file for splunk-forwarder
+- name: Enable Splunk Forwarder
+  service:
+    name: splunk-forwarder
+    enabled: true
+    state: started
+  become: yes

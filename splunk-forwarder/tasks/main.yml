@@ -1,2 +1,42 @@
 ---
 # tasks file for splunk-forwarder
+- name: Install and Configure Splunk Forwarder for RHEL
+  include_tasks: 
+    file: "{{ task_list_item }}"
+    apply:
+      tags:
+        - install
+  when: ansible_facts['os_family']|lower == 'redhat'
+  loop:
+    - rhel-splunk-forwarder-install.yml
+    - rhel-splunk-forwarder-configure.yml
+  loop_control:
+    loop_var: task_list_item
+  tags: install
+
+- name: Configure Splunk Forwarder for RHEL
+  include_tasks:
+    file: rhel-splunk-forwarder-configure.yml
+    apply:
+      tags:
+        - configure
+  when: ansible_facts['os_family']|lower == 'redhat'
+  tags: configure
+
+- name: Remove Splunk Forwarder for RHEL
+  include_tasks:
+    file: rhel-splunk-forwarder-remove.yml
+    apply:
+      tags:
+        - remove
+  when: ansible_facts['os_family']|lower == 'redhat'
+  tags: remove
+
+- name: Get Splunk-Forwarder Status
+  include_tasks:
+    file: rhel-splunk-forwarder-status.yml
+    apply:
+      tags:
+        - status
+  when: ansible_facts['os_family']|lower == 'redhat'
+  tags: status

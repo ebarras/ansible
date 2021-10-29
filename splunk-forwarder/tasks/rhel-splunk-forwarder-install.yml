@@ -1,0 +1,6 @@
+- name: Install Splunk from Yum
+  yum:
+    name: "{{splunk_url}}"
+    state: present
+    disable_gpg_check: true
+  become: yes

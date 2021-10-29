@@ -1,0 +1,51 @@
+- name: Check if Service Exists
+  stat: 
+    path: /etc/systemd/system/splunk-forwarder.service
+  register: service_status
+
+- name: Stop Splunk Forwarder Service
+  service:
+    name: splunk-forwarder
+    state: stopped
+  become: yes
+  when: service_status.stat.exists
+
+- name: Remove Splunk Forwarder Service File
+  file:
+    path: /etc/systemd/system/splunk-forwarder.service
+    state: absent
+  become: yes
+
+- name: Remove Splunk Directory
+  file:
+    path: /opt/splunkforwarder
+    state: absent
+  become: yes
+
+- name: Remove logfile permissions
+  acl:
+    path: "{{ log_item_remove }}"
+    entity: "{{ splunk_forwarder_user }}"
+    state: absent
+    etype: user
+    recursive: true
+  with_items: "{{ splunk_forwarder_logs }}"
+  loop_control:
+    loop_var: log_item_remove
+  become: yes
+
+- name: Remove Splunk user
+  user:
+    name: "{{ splunk_forwarder_user }}"
+    state: absent
+    remove: yes
+  become: yes
+
+- name: Remove Splunk group
+  group:
+    name: "{{ splunk_forwarder_group }}"
+    state: absent
+  become: yes
+
+
+  
